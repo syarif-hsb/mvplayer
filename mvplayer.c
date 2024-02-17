@@ -25,6 +25,12 @@ int main(int argc, char *argv[])
         case SDL_QUIT:
           mvp_loop = 0;
           break;
+        case SDL_MOUSEMOTION:
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+        case SDL_MOUSEWHEEL:
+          mvp_mouse_event_handle( &e );
+          break;
       }
     }
     mvp_draw_background();

@@ -2,7 +2,7 @@ CC			= gcc
 SRC			= mvplayer.c ui.c
 OBJ     = ${SRC:.c=.o}
 CFLAGS	= -Wall -g
-LDFLAGS	= -lSDL2 -lSDL2_ttf -lSDL2_image
+LDFLAGS	= -lSDL2
 
 all: mvplayer
 
