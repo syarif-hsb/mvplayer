@@ -34,17 +34,27 @@ void mvp_init_window(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
   ui_t.slid_progress = 0.0;
   ui_t.slid_state = MVP_SLIDER_RELEASED;
 
+  ui_t.bg_color.r = 230;
+  ui_t.bg_color.g = 230;
+  ui_t.bg_color.b = 230;
+  ui_t.bg_color.a = 255;
+
   return;
 }
 
 void mvp_draw_background()
 {
-  SDL_SetRenderDrawColor( ui_t.renderer, 200, 200, 200, 255 );
+  SDL_SetRenderDrawColor(
+      ui_t.renderer,
+      ui_t.bg_color.r,
+      ui_t.bg_color.g,
+      ui_t.bg_color.b,
+      ui_t.bg_color.a
+      );
   SDL_RenderClear( ui_t.renderer );
-
   mvp_draw_slider( ui_t.slid_progress );
-
   SDL_RenderPresent( ui_t.renderer );
+
   return;
 }
 
@@ -52,41 +62,44 @@ void mvp_draw_slider( float progress )
 {
   uint32_t slid_w = 8;
   uint32_t slid_h = ui_t.slid_rail_rect.h + 12 ;
-  uint32_t slid_x = ui_t.slid_rail_rect.x + 
-    (uint32_t) ( progress * ( ui_t.slid_rail_rect.w - slid_w ) ) 
+  uint32_t slid_x = ui_t.slid_rail_rect.x +
+    (uint32_t) ( progress * ( ui_t.slid_rail_rect.w - slid_w ) )
     / 100.0;
   uint32_t slid_y = ui_t.slid_rail_rect.y - 6;
 
-  SDL_Rect slider = { 
+  SDL_Rect slider = {
     slid_x,
     slid_y,
     slid_w,
     slid_h,
   };
-  SDL_Vertex slider_tri1 = { 
-    { slid_x, ui_t.slid_rail_rect.y + ui_t.slid_rail_rect.h + 6  }, 
-    { 255, 0, 0, 255 }, 
-    { 1, 1 } 
+  SDL_Vertex slider_tri1 = {
+    { slid_x,
+      ui_t.slid_rail_rect.y + ui_t.slid_rail_rect.h + 6  },
+    { 255, 0, 0, 255 },
+    { 1, 1 }
   };
-  SDL_Vertex slider_tri2 = { 
-    { slid_x + slid_w, ui_t.slid_rail_rect.y + ui_t.slid_rail_rect.h + 6  }, 
-    { 255, 0, 0, 255 }, 
-    { 1, 1 } 
+  SDL_Vertex slider_tri2 = {
+    { slid_x + slid_w,
+      ui_t.slid_rail_rect.y + ui_t.slid_rail_rect.h + 6  },
+    { 255, 0, 0, 255 },
+    { 1, 1 }
   };
-  SDL_Vertex slider_tri3 = { 
-    { slid_x + slid_w/2, ui_t.slid_rail_rect.y + ui_t.slid_rail_rect.h + 12 }, 
-    { 255, 0, 0, 255 }, 
-    { 1, 1 } 
+  SDL_Vertex slider_tri3 = {
+    { slid_x + slid_w/2,
+      ui_t.slid_rail_rect.y + ui_t.slid_rail_rect.h + 12 },
+    { 255, 0, 0, 255 },
+    { 1, 1 }
   };
-  SDL_Vertex slider_tri[] = { 
-    slider_tri1, 
-    slider_tri2, 
-    slider_tri3 
+  SDL_Vertex slider_tri[] = {
+    slider_tri1,
+    slider_tri2,
+    slider_tri3
   };
 
   SDL_SetRenderDrawColor( ui_t.renderer, 255, 0, 0, 255 );
 
-  SDL_RenderCopy( ui_t.renderer, ui_t.slid_rail_tex, 
+  SDL_RenderCopy( ui_t.renderer, ui_t.slid_rail_tex,
       NULL, &ui_t.slid_rail_rect );
   SDL_RenderFillRect( ui_t.renderer, &slider );
   SDL_RenderGeometry( ui_t.renderer, NULL, slider_tri, 3, NULL, 0 );
@@ -96,7 +109,7 @@ void mvp_draw_slider( float progress )
 
 void mvp_mouse_slide( uint32_t mx, uint32_t my )
 {
-  float slid_progress = (int) ( mx - ( ui_t.slid_rail_rect.x + 4 ) ) / 
+  float slid_progress = (int) ( mx - ( ui_t.slid_rail_rect.x + 4 ) ) /
     (float) ( ui_t.slid_rail_rect.w - 8 ) * 100.0;
 
   if ( slid_progress < 0.0 ) {
@@ -135,8 +148,10 @@ void mvp_mouse_event_handle( SDL_Event *e )
       }
     case SDL_MOUSEBUTTONDOWN:
       {
-        if ( ui_t.slid_state == MVP_SLIDER_RELEASED && 
-            mouse_in_slider_rail( e->button.x, e->button.y ) == SDL_TRUE ) {
+        if ( ui_t.slid_state == MVP_SLIDER_RELEASED &&
+            mouse_in_slider_rail(
+              e->button.x,
+              e->button.y ) == SDL_TRUE ) {
           mvp_mouse_slide( e->button.x, e->button.y );
           ui_t.slid_state = MVP_SLIDER_CLICKED;
         }

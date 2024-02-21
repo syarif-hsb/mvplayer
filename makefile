@@ -2,7 +2,7 @@ CC			= gcc
 SRC			= mvplayer.c ui.c
 OBJ     = ${SRC:.c=.o}
 CFLAGS	= -Wall -g
-LDFLAGS	= -lSDL2
+LDFLAGS	= `pkg-config --libs sdl2`
 
 all: mvplayer
 
